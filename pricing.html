@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - Chimeo Push Notifications</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Chimeo</h2>
+                <div class="logo-icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="pricing.html" class="nav-link active">Pricing</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://chimeo.app" class="nav-link login-link" target="_blank">Login</a>
+                </li>
+            </ul>
+            <div class="nav-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Pricing Hero -->
+    <section class="pricing-hero">
+        <div class="container">
+            <div class="pricing-hero-content">
+                <h1>Simple, Transparent Pricing</h1>
+                <p>Choose the plan that's right for your organization. No hidden fees, no surprises.</p>
+                <div class="billing-toggle">
+                    <span class="billing-label">Monthly</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="billing-toggle">
+                        <span class="slider"></span>
+                    </label>
+                    <span class="billing-label">Annual <span class="discount">Save 20%</span></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Cards -->
+    <section class="pricing-cards">
+        <div class="container">
+            <div class="pricing-grid">
+                <!-- Free Plan -->
+                <div class="pricing-card">
+                    <div class="plan-header">
+                        <h3>Free</h3>
+                        <p>Perfect for small organizations getting started</p>
+                        <div class="price">
+                            <span class="currency">$</span>
+                            <span class="amount" data-monthly="0" data-annual="0">0</span>
+                            <span class="period">/month</span>
+                        </div>
+                    </div>
+                    <div class="plan-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> 1 organization admin</li>
+                            <li><i class="fas fa-check"></i> 2 groups</li>
+                            <li><i class="fas fa-check"></i> 25 alerts per month</li>
+                            <li><i class="fas fa-check"></i> Limited web browser access</li>
+                            <li><i class="fas fa-check"></i> Basic push notifications</li>
+                            <li><i class="fas fa-check"></i> Email support</li>
+                            <li><i class="fas fa-check"></i> Mobile app access</li>
+                            <li><i class="fas fa-check"></i> Basic scheduling</li>
+                        </ul>
+                    </div>
+                    <div class="plan-footer">
+                        <a href="#" class="btn btn-outline">Start Free Trial</a>
+                    </div>
+                </div>
+
+                <!-- Pro Plan -->
+                <div class="pricing-card">
+                    <div class="plan-header">
+                        <h3>Pro</h3>
+                        <p>Perfect for small organizations</p>
+                        <div class="price">
+                            <span class="currency">$</span>
+                            <span class="amount" data-monthly="10" data-annual="100">10</span>
+                            <span class="period">/month</span>
+                        </div>
+                    </div>
+                    <div class="plan-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> 2 organization admins</li>
+                            <li><i class="fas fa-check"></i> 5 groups</li>
+                            <li><i class="fas fa-check"></i> 100 alerts per month</li>
+                            <li><i class="fas fa-check"></i> Full web browser access</li>
+                            <li><i class="fas fa-check"></i> Advanced push notifications</li>
+                            <li><i class="fas fa-check"></i> Priority email support</li>
+                            <li><i class="fas fa-check"></i> Mobile app access</li>
+                            <li><i class="fas fa-check"></i> Advanced scheduling</li>
+                            <li><i class="fas fa-check"></i> Group management tools</li>
+                            <li><i class="fas fa-check"></i> Basic analytics & reporting</li>
+                        </ul>
+                    </div>
+                    <div class="plan-footer">
+                        <a href="#" class="btn btn-primary">Start Free Trial</a>
+                    </div>
+                </div>
+
+                <!-- Premium Plan -->
+                <div class="pricing-card featured">
+                    <div class="popular-badge">Most Popular</div>
+                    <div class="plan-header">
+                        <h3>Premium</h3>
+                        <p>Ideal for growing organizations</p>
+                        <div class="price">
+                            <span class="currency">$</span>
+                            <span class="amount" data-monthly="25" data-annual="250">25</span>
+                            <span class="period">/month</span>
+                        </div>
+                    </div>
+                    <div class="plan-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> 10+ organization admins</li>
+                            <li><i class="fas fa-check"></i> 25 groups</li>
+                            <li><i class="fas fa-check"></i> 500 alerts per month</li>
+                            <li><i class="fas fa-check"></i> Full web browser access</li>
+                            <li><i class="fas fa-check"></i> Premium push notifications</li>
+                            <li><i class="fas fa-check"></i> Priority phone & email support</li>
+                            <li><i class="fas fa-check"></i> Mobile app access</li>
+                            <li><i class="fas fa-check"></i> Advanced scheduling</li>
+                            <li><i class="fas fa-check"></i> Emergency alert system</li>
+                            <li><i class="fas fa-check"></i> Basic analytics</li>
+                        </ul>
+                    </div>
+                    <div class="plan-footer">
+                        <a href="#" class="btn btn-primary">Start Free Trial</a>
+                    </div>
+                </div>
+
+                <!-- Enterprise Plan -->
+                <div class="pricing-card">
+                    <div class="plan-header">
+                        <h3>Enterprise</h3>
+                        <p>For large organizations with complex needs</p>
+                        <div class="price">
+                            <span class="price-text">Custom Quote</span>
+                        </div>
+                    </div>
+                    <div class="plan-features">
+                        <ul>
+                            <li><i class="fas fa-check"></i> Unlimited organization admins</li>
+                            <li><i class="fas fa-check"></i> Unlimited groups</li>
+                            <li><i class="fas fa-check"></i> Unlimited alerts</li>
+                            <li><i class="fas fa-check"></i> Full web browser access</li>
+                            <li><i class="fas fa-check"></i> Enterprise-grade notifications</li>
+                            <li><i class="fas fa-check"></i> Priority email support</li>
+                            <li><i class="fas fa-check"></i> Mobile app access</li>
+                            <li><i class="fas fa-check"></i> Advanced scheduling</li>
+                            <li><i class="fas fa-check"></i> Emergency alert system</li>
+                            <li><i class="fas fa-check"></i> Basic analytics</li>
+                        </ul>
+                    </div>
+                    <div class="plan-footer">
+                        <a href="mailto:sales@chimeo.app?subject=Enterprise Custom Quote" class="btn btn-outline">Contact Sales</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Comparison -->
+    <section class="features-comparison">
+        <div class="container">
+            <div class="section-header">
+                <h2>Compare Features</h2>
+                <p>See what's included in each plan</p>
+            </div>
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Features</th>
+                            <th>Free</th>
+                            <th>Pro</th>
+                            <th>Premium</th>
+                            <th>Enterprise</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Organization Admins</td>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>10+</td>
+                            <td>Unlimited</td>
+                        </tr>
+                        <tr>
+                            <td>Groups</td>
+                            <td>2</td>
+                            <td>5</td>
+                            <td>25</td>
+                            <td>Unlimited</td>
+                        </tr>
+                        <tr>
+                            <td>Alerts/Month</td>
+                            <td>25</td>
+                            <td>100</td>
+                            <td>500</td>
+                            <td>Unlimited</td>
+                        </tr>
+                        <tr>
+                            <td>Web Access</td>
+                            <td>Limited</td>
+                            <td>Full</td>
+                            <td>Full</td>
+                            <td>Full</td>
+                        </tr>
+                        <tr>
+                            <td>Pricing</td>
+                            <td>Free</td>
+                            <td>$10/month</td>
+                            <td>$25/month</td>
+                            <td>Custom Quote</td>
+                        </tr>
+                        <tr>
+                            <td>Analytics</td>
+                            <td>Basic</td>
+                            <td>Basic</td>
+                            <td>Basic</td>
+                            <td>Basic</td>
+                        </tr>
+                        <tr>
+                            <td>Support</td>
+                            <td>Email</td>
+                            <td>Priority</td>
+                            <td>24/7 Phone</td>
+                        </tr>
+                        <tr>
+                            <td>Emergency Alerts</td>
+                            <td>No</td>
+                            <td>No</td>
+                            <td>Yes</td>
+                            <td>Yes</td>
+                        </tr>
+                        <tr>
+                            <td>API Access</td>
+                            <td>No</td>
+                            <td>Yes</td>
+                            <td>Full Access</td>
+                        </tr>
+                        <tr>
+                            <td>SSO</td>
+                            <td>No</td>
+                            <td>No</td>
+                            <td>Yes</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enterprise Custom Quote Section -->
+    <section class="enterprise-quote">
+        <div class="container">
+            <div class="enterprise-content">
+                <div class="enterprise-text">
+                    <h2>Need a Custom Solution?</h2>
+                    <p>For large organizations with specific requirements, we offer custom enterprise solutions tailored to your needs.</p>
+                    <ul class="enterprise-features">
+                        <li><i class="fas fa-check"></i> Custom recipient limits</li>
+                        <li><i class="fas fa-check"></i> White-label branding</li>
+                        <li><i class="fas fa-check"></i> Advanced integrations</li>
+                        <li><i class="fas fa-check"></i> Dedicated support team</li>
+                        <li><i class="fas fa-check"></i> Custom API development</li>
+                        <li><i class="fas fa-check"></i> On-premise deployment options</li>
+                    </ul>
+                </div>
+                <div class="enterprise-cta">
+                    <a href="mailto:sales@chimeo.app?subject=Enterprise Custom Quote" class="btn btn-primary btn-large">
+                        <i class="fas fa-envelope"></i> Get Custom Quote
+                    </a>
+                    <p class="enterprise-note">Contact our sales team for a personalized solution</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2>Frequently Asked Questions</h2>
+                <p>Everything you need to know about our pricing</p>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3>Can I change plans anytime?</h3>
+                    <p>Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately, and we'll prorate any billing differences.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Is there a free trial?</h3>
+                    <p>Yes, all plans come with a 14-day free trial. No credit card required to get started.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>What payment methods do you accept?</h3>
+                    <p>We accept all major credit cards, PayPal, and bank transfers for annual plans.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Do you offer refunds?</h3>
+                    <p>Yes, we offer a 30-day money-back guarantee if you're not satisfied with our service.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Can I get a custom plan?</h3>
+                    <p>Yes, we offer custom enterprise plans for organizations with specific needs. Contact our sales team for more information.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Is my data secure?</h3>
+                    <p>Absolutely. We use enterprise-grade security measures and are SOC 2 compliant. Your data is encrypted and stored securely.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Keep Your Community Connected?</h2>
+                <p>Join hundreds of organizations already using Chimeo to keep their communities informed and safe.</p>
+                <a href="#" class="btn btn-primary btn-large">Start Your Free Trial</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Chimeo</h3>
+                    <p>Keeping communities connected with instant push notifications and alerts.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="index.html#features">Features</a></li>
+                        <li><a href="pricing.html">Pricing</a></li>
+                        <li><a href="#">API</a></li>
+                        <li><a href="#">Integrations</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Press</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Account</h4>
+                    <ul>
+                        <li><a href="https://chimeo.app" target="_blank">Login</a></li>
+                        <li><a href="pricing.html">Sign Up</a></li>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Status</a></li>
+                        <li><a href="#">Community</a></li>
+                        <li><a href="#">API Docs</a></li>
+                        <li><a href="#">Status</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Chimeo. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
