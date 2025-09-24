@@ -331,12 +331,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // Stripe Payment Links (create these in Stripe Dashboard > Payment Links)
         const stripePaymentLinks = {
             pro: {
-                monthly: 'https://buy.stripe.com/test_1234567890abcdef', // Create Payment Link for Pro monthly
-                annual: 'https://buy.stripe.com/test_0987654321fedcba'    // Create Payment Link for Pro annual
+                monthly: 'https://buy.stripe.com/test_1234567890abcdef', // Replace with your actual Pro monthly payment link
+                annual: 'https://buy.stripe.com/test_0987654321fedcba'    // Replace with your actual Pro annual payment link
             },
             premium: {
-                monthly: 'https://buy.stripe.com/test_abcdef1234567890', // Create Payment Link for Premium monthly
-                annual: 'https://buy.stripe.com/test_fedcba0987654321'    // Create Payment Link for Premium annual
+                monthly: 'https://buy.stripe.com/test_abcdef1234567890', // Replace with your actual Premium monthly payment link
+                annual: 'https://buy.stripe.com/test_fedcba0987654321'    // Replace with your actual Premium annual payment link
             }
         };
         
@@ -344,8 +344,22 @@ document.addEventListener('DOMContentLoaded', function() {
         const billingToggle = document.getElementById('billing-toggle');
         const isAnnual = billingToggle ? billingToggle.checked : false;
         
-        // For now, always redirect to checkout page (no Stripe errors)
-        window.location.href = `checkout.html?plan=${plan}&price=${price}`;
+        // Redirect to Stripe Payment Link
+        if (stripePaymentLinks[plan]) {
+            const billingType = isAnnual ? 'annual' : 'monthly';
+            const paymentLink = stripePaymentLinks[plan][billingType];
+            
+            // Check if it's a real payment link (not placeholder)
+            if (paymentLink && !paymentLink.includes('test_1234567890abcdef')) {
+                window.location.href = paymentLink;
+            } else {
+                // Fallback: redirect to checkout page
+                window.location.href = `checkout.html?plan=${plan}&price=${price}`;
+            }
+        } else {
+            // Fallback: redirect to checkout page
+            window.location.href = `checkout.html?plan=${plan}&price=${price}`;
+        }
         
         // Re-enable button after 2 seconds if redirect fails
         setTimeout(() => {
