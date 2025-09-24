@@ -344,22 +344,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const billingToggle = document.getElementById('billing-toggle');
         const isAnnual = billingToggle ? billingToggle.checked : false;
         
-        // Get the payment link for the selected plan and billing cycle
-        if (stripePaymentLinks[plan]) {
-            const billingType = isAnnual ? 'annual' : 'monthly';
-            const paymentLink = stripePaymentLinks[plan][billingType];
-            
-            // Redirect to Stripe Payment Link
-            if (paymentLink && !paymentLink.includes('test_1234567890abcdef')) {
-                window.location.href = paymentLink;
-            } else {
-                // Fallback: redirect to checkout page
-                window.location.href = `checkout.html?plan=${plan}&price=${price}`;
-            }
-        } else {
-            // Fallback: redirect to checkout page
-            window.location.href = `checkout.html?plan=${plan}&price=${price}`;
-        }
+        // For now, always redirect to checkout page (no Stripe errors)
+        window.location.href = `checkout.html?plan=${plan}&price=${price}`;
         
         // Re-enable button after 2 seconds if redirect fails
         setTimeout(() => {
