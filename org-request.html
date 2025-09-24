@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organization Request - Chimeo</title>
+    <link rel="stylesheet" href="./styles.css?v=5">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-bell"></i>
+                <a href="index.html">Chimeo</a>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="pricing.html" class="nav-link">Pricing</a>
+                <a href="https://chimeo.app" class="nav-link login-link">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Organization Request Form -->
+    <section class="org-request-section">
+        <div class="container">
+            <div class="org-request-content">
+                <div class="org-request-header">
+                    <h1>Organization Request Form</h1>
+                    <p>Please complete this form to request access to Chimeo for your organization. This is required before purchasing any subscription tier.</p>
+                </div>
+
+                <form id="org-request-form" class="org-request-form">
+                    <div class="form-group">
+                        <label for="org-name">Organization Name *</label>
+                        <input type="text" id="org-name" name="orgName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="org-type">Organization Type *</label>
+                        <select id="org-type" name="orgType" required>
+                            <option value="">Select organization type</option>
+                            <option value="school">School</option>
+                            <option value="church">Church</option>
+                            <option value="town-hall">Town Hall</option>
+                            <option value="community-center">Community Center</option>
+                            <option value="non-profit">Non-Profit</option>
+                            <option value="business">Business</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="org-address">Organization Address *</label>
+                        <textarea id="org-address" name="orgAddress" rows="3" required placeholder="Street address, city, state, zip code"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-name">Primary Contact Name *</label>
+                        <input type="text" id="contact-name" name="contactName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-email">Primary Contact Email *</label>
+                        <input type="email" id="contact-email" name="contactEmail" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-phone">Primary Contact Phone *</label>
+                        <input type="tel" id="contact-phone" name="contactPhone" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="org-size">Organization Size *</label>
+                        <select id="org-size" name="orgSize" required>
+                            <option value="">Select organization size</option>
+                            <option value="1-50">1-50 members</option>
+                            <option value="51-100">51-100 members</option>
+                            <option value="101-500">101-500 members</option>
+                            <option value="501-1000">501-1,000 members</option>
+                            <option value="1000+">1,000+ members</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="expected-usage">Expected Monthly Alert Usage *</label>
+                        <select id="expected-usage" name="expectedUsage" required>
+                            <option value="">Select expected usage</option>
+                            <option value="1-25">1-25 alerts</option>
+                            <option value="26-100">26-100 alerts</option>
+                            <option value="101-500">101-500 alerts</option>
+                            <option value="500+">500+ alerts</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="use-case">Primary Use Case *</label>
+                        <select id="use-case" name="useCase" required>
+                            <option value="">Select primary use case</option>
+                            <option value="emergency-alerts">Emergency alerts</option>
+                            <option value="event-notifications">Event notifications</option>
+                            <option value="schedule-changes">Schedule changes</option>
+                            <option value="general-announcements">General announcements</option>
+                            <option value="multiple">Multiple use cases</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="additional-info">Additional Information</label>
+                        <textarea id="additional-info" name="additionalInfo" rows="4" placeholder="Tell us more about your organization's communication needs..."></textarea>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="terms-agreement" name="termsAgreement" required>
+                            <span class="checkmark"></span>
+                            I agree to the <a href="#" target="_blank">Terms of Service</a> and <a href="#" target="_blank">Privacy Policy</a> *
+                        </label>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="marketing-consent" name="marketingConsent">
+                            <span class="checkmark"></span>
+                            I would like to receive updates about Chimeo features and news
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary org-request-btn">
+                        <i class="fas fa-paper-plane"></i>
+                        Submit Organization Request
+                    </button>
+                </form>
+
+                <div class="org-request-info">
+                    <h3>What happens next?</h3>
+                    <div class="info-steps">
+                        <div class="info-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Review Process</h4>
+                                <p>We'll review your organization request within 24 hours</p>
+                            </div>
+                        </div>
+                        <div class="info-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Approval & Setup</h4>
+                                <p>Once approved, you'll receive setup instructions and access to purchase a subscription</p>
+                            </div>
+                        </div>
+                        <div class="info-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Start Using Chimeo</h4>
+                                <p>Begin sending alerts to your organization members</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Chimeo</h3>
+                    <p>Powerful push notification alerting system for schools, churches, town halls, and community organizations.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="pricing.html">Pricing</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="https://chimeo.app">Login</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Chimeo. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="./script.js?v=5"></script>
+</body>
+</html>

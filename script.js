@@ -305,10 +305,14 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const plan = this.getAttribute('data-plan');
             const price = this.getAttribute('data-price');
+            const requiresOrg = this.getAttribute('data-requires-org');
             
             if (plan === 'free') {
                 // Handle free trial signup
                 handleFreeTrial();
+            } else if (requiresOrg === 'true') {
+                // Check if organization request is required
+                checkOrgRequestStatus(plan, price);
             } else {
                 // Handle paid subscription - redirect to Stripe Checkout
                 handlePaidSubscription(plan, price);
@@ -316,9 +320,91 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+    // Handle organization request form submission
+    const orgForm = document.getElementById('org-request-form');
+    if (orgForm) {
+        orgForm.addEventListener('submit', handleOrgRequestSubmission);
+    }
+    
     function handleFreeTrial() {
         // Redirect to signup page
         window.location.href = 'https://chimeo.app/signup?plan=free';
+    }
+
+    function checkOrgRequestStatus(plan, price) {
+        // Check if user has already submitted organization request
+        const orgRequestSubmitted = localStorage.getItem('orgRequestSubmitted');
+        const orgRequestEmail = localStorage.getItem('orgRequestEmail');
+        
+        if (orgRequestSubmitted && orgRequestEmail) {
+            // Check if organization request was approved
+            checkOrgApprovalStatus(orgRequestEmail, plan, price);
+        } else {
+            // Redirect to organization request form
+            window.location.href = `org-request.html?plan=${plan}&price=${price}`;
+        }
+    }
+
+    function checkOrgApprovalStatus(email, plan, price) {
+        // In a real implementation, this would check with your backend
+        // For now, we'll simulate checking approval status
+        const orgApproved = localStorage.getItem(`orgApproved_${email}`);
+        
+        if (orgApproved === 'true') {
+            // Organization approved, proceed to payment
+            handlePaidSubscription(plan, price);
+        } else {
+            // Organization not yet approved, show pending message
+            showOrgPendingMessage();
+        }
+    }
+
+    function showOrgPendingMessage() {
+        alert('Your organization request is still being reviewed. You will receive an email once it\'s approved and you can proceed with your subscription.');
+    }
+
+    // Handle organization request form submission
+    function handleOrgRequestSubmission(e) {
+        e.preventDefault();
+        
+        const form = e.target;
+        const formData = new FormData(form);
+        const orgData = Object.fromEntries(formData.entries());
+        
+        // Validate required fields
+        const requiredFields = ['orgName', 'orgType', 'orgAddress', 'contactName', 'contactEmail', 'contactPhone', 'orgSize', 'expectedUsage', 'useCase', 'termsAgreement'];
+        const missingFields = requiredFields.filter(field => !orgData[field]);
+        
+        if (missingFields.length > 0) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+        
+        // Store organization request data
+        localStorage.setItem('orgRequestSubmitted', 'true');
+        localStorage.setItem('orgRequestEmail', orgData.contactEmail);
+        localStorage.setItem('orgRequestData', JSON.stringify(orgData));
+        
+        // Show success message
+        showOrgRequestSuccess();
+        
+        // In a real implementation, you would send this data to your backend
+        console.log('Organization request submitted:', orgData);
+    }
+
+    function showOrgRequestSuccess() {
+        const successMessage = `
+            <div style="text-align: center; padding: 2rem; background: #f0f9ff; border: 2px solid #0ea5e9; border-radius: 12px; margin: 2rem 0;">
+                <i class="fas fa-check-circle" style="font-size: 3rem; color: #0ea5e9; margin-bottom: 1rem;"></i>
+                <h2 style="color: #0c4a6e; margin-bottom: 1rem;">Organization Request Submitted!</h2>
+                <p style="color: #0c4a6e; margin-bottom: 1.5rem;">Thank you for your interest in Chimeo. We'll review your organization request within 24 hours and send you an email with next steps.</p>
+                <button onclick="window.location.href='pricing.html'" style="background: #0ea5e9; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                    Return to Pricing
+                </button>
+            </div>
+        `;
+        
+        document.querySelector('.org-request-content').innerHTML = successMessage;
     }
     
     function handlePaidSubscription(plan, price) {
