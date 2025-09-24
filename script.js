@@ -349,8 +349,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const billingType = isAnnual ? 'annual' : 'monthly';
             const paymentLink = stripePaymentLinks[plan][billingType];
             
-            // Check if it's a real payment link (not placeholder)
-            if (paymentLink && !paymentLink.includes('test_1234567890abcdef') && !paymentLink.includes('test_0987654321fedcba') && !paymentLink.includes('test_abcdef1234567890') && !paymentLink.includes('test_fedcba0987654321')) {
+            // For Pro monthly, always use Stripe
+            if (plan === 'pro' && billingType === 'monthly') {
+                window.location.href = 'https://buy.stripe.com/test_6oU8wO45c73J1bj0W5eAg00';
+            } else if (paymentLink && !paymentLink.includes('test_1234567890abcdef')) {
                 window.location.href = paymentLink;
             } else {
                 // Fallback: redirect to checkout page
