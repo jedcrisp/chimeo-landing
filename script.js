@@ -331,7 +331,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Stripe Payment Links (create these in Stripe Dashboard > Payment Links)
         const stripePaymentLinks = {
             pro: {
-                monthly: 'https://buy.stripe.com/test_1234567890abcdef', // Replace with your actual Pro monthly payment link
+                monthly: 'https://buy.stripe.com/test_6oU8wO45c73J1bj0W5eAg00', // Your Pro monthly payment link
                 annual: 'https://buy.stripe.com/test_0987654321fedcba'    // Replace with your actual Pro annual payment link
             },
             premium: {
@@ -350,7 +350,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const paymentLink = stripePaymentLinks[plan][billingType];
             
             // Check if it's a real payment link (not placeholder)
-            if (paymentLink && !paymentLink.includes('test_1234567890abcdef')) {
+            if (paymentLink && !paymentLink.includes('test_1234567890abcdef') && !paymentLink.includes('test_0987654321fedcba') && !paymentLink.includes('test_abcdef1234567890') && !paymentLink.includes('test_fedcba0987654321')) {
                 window.location.href = paymentLink;
             } else {
                 // Fallback: redirect to checkout page
