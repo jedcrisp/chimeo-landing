@@ -328,15 +328,15 @@ document.addEventListener('DOMContentLoaded', function() {
         button.textContent = 'Loading...';
         button.disabled = true;
         
-        // Stripe Checkout URLs (replace with your actual Stripe Checkout URLs from Stripe Dashboard)
-        const stripeCheckoutUrls = {
+        // Stripe Price IDs (replace with your actual Price IDs from Stripe Dashboard)
+        const stripePriceIds = {
             pro: {
-                monthly: 'https://buy.stripe.com/test_pro_monthly_url', // Pro $10/month
-                annual: 'https://buy.stripe.com/test_pro_annual_url'    // Pro $100/year
+                monthly: 'price_1SAhNhCff8mDk0lRZnWDYGKT', // Your Pro monthly price ID
+                annual: 'price_YOUR_PRO_ANNUAL_ID'   // Replace with your Pro annual price ID
             },
             premium: {
-                monthly: 'https://buy.stripe.com/test_premium_monthly_url', // Premium $25/month
-                annual: 'https://buy.stripe.com/test_premium_annual_url'    // Premium $250/year
+                monthly: 'price_YOUR_PREMIUM_MONTHLY_ID', // Replace with your Premium monthly price ID
+                annual: 'price_YOUR_PREMIUM_ANNUAL_ID'   // Replace with your Premium annual price ID
             }
         };
         
@@ -344,10 +344,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const billingToggle = document.getElementById('billing-toggle');
         const isAnnual = billingToggle ? billingToggle.checked : false;
         
-        // Redirect directly to Stripe Checkout
-        if (stripeCheckoutUrls[plan]) {
+        // Get the price ID for the selected plan and billing cycle
+        if (stripePriceIds[plan]) {
             const billingType = isAnnual ? 'annual' : 'monthly';
-            window.location.href = stripeCheckoutUrls[plan][billingType];
+            const priceId = stripePriceIds[plan][billingType];
+            
+            // Redirect to Stripe Checkout with price ID
+            window.location.href = `https://checkout.stripe.com/pay/${priceId}`;
         } else {
             // Fallback: redirect to checkout page
             window.location.href = `checkout.html?plan=${plan}&price=${price}`;
