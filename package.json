@@ -1,0 +1,13 @@
+{
+  "name": "chimeo-landing",
+  "version": "1.0.0",
+  "description": "Chimeo push notification landing page",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'Static site - no build needed'",
+    "start": "python3 -m http.server 8000"
+  },
+  "keywords": ["chimeo", "push-notifications", "landing-page"],
+  "author": "Chimeo",
+  "license": "MIT"
+}
