@@ -328,15 +328,15 @@ document.addEventListener('DOMContentLoaded', function() {
         button.textContent = 'Loading...';
         button.disabled = true;
         
-        // Stripe Price IDs (replace with your actual Price IDs from Stripe Dashboard)
-        const stripePriceIds = {
+        // Stripe Payment Links (create these in Stripe Dashboard > Payment Links)
+        const stripePaymentLinks = {
             pro: {
-                monthly: 'price_1SAhNhCff8mDk0lRZnWDYGKT', // Your Pro monthly price ID
-                annual: 'price_YOUR_PRO_ANNUAL_ID'   // Replace with your Pro annual price ID
+                monthly: 'https://buy.stripe.com/test_1234567890abcdef', // Create Payment Link for Pro monthly
+                annual: 'https://buy.stripe.com/test_0987654321fedcba'    // Create Payment Link for Pro annual
             },
             premium: {
-                monthly: 'price_YOUR_PREMIUM_MONTHLY_ID', // Replace with your Premium monthly price ID
-                annual: 'price_YOUR_PREMIUM_ANNUAL_ID'   // Replace with your Premium annual price ID
+                monthly: 'https://buy.stripe.com/test_abcdef1234567890', // Create Payment Link for Premium monthly
+                annual: 'https://buy.stripe.com/test_fedcba0987654321'    // Create Payment Link for Premium annual
             }
         };
         
@@ -344,13 +344,18 @@ document.addEventListener('DOMContentLoaded', function() {
         const billingToggle = document.getElementById('billing-toggle');
         const isAnnual = billingToggle ? billingToggle.checked : false;
         
-        // Get the price ID for the selected plan and billing cycle
-        if (stripePriceIds[plan]) {
+        // Get the payment link for the selected plan and billing cycle
+        if (stripePaymentLinks[plan]) {
             const billingType = isAnnual ? 'annual' : 'monthly';
-            const priceId = stripePriceIds[plan][billingType];
+            const paymentLink = stripePaymentLinks[plan][billingType];
             
-            // Redirect to Stripe Checkout with price ID
-            window.location.href = `https://checkout.stripe.com/pay/${priceId}`;
+            // Redirect to Stripe Payment Link
+            if (paymentLink && !paymentLink.includes('test_1234567890abcdef')) {
+                window.location.href = paymentLink;
+            } else {
+                // Fallback: redirect to checkout page
+                window.location.href = `checkout.html?plan=${plan}&price=${price}`;
+            }
         } else {
             // Fallback: redirect to checkout page
             window.location.href = `checkout.html?plan=${plan}&price=${price}`;
