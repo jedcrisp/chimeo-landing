@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -89,7 +90,7 @@
                         </ul>
                     </div>
                     <div class="plan-footer">
-                        <a href="#" class="btn btn-outline">Start Free Trial</a>
+                        <button class="btn btn-outline stripe-button" data-plan="free">Start Free Trial</button>
                     </div>
                 </div>
 
@@ -119,7 +120,7 @@
                         </ul>
                     </div>
                     <div class="plan-footer">
-                        <a href="#" class="btn btn-primary">Start Free Trial</a>
+                        <button class="btn btn-primary stripe-button" data-plan="pro" data-price="1000">Subscribe to Pro - $10/month</button>
                     </div>
                 </div>
 
@@ -150,7 +151,7 @@
                         </ul>
                     </div>
                     <div class="plan-footer">
-                        <a href="#" class="btn btn-primary">Start Free Trial</a>
+                        <button class="btn btn-primary stripe-button" data-plan="premium" data-price="2500">Subscribe to Premium - $25/month</button>
                     </div>
                 </div>
 

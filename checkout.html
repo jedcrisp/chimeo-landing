@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Chimeo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Chimeo</h2>
+                <div class="logo-icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="pricing.html" class="nav-link">Pricing</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://chimeo.app" class="nav-link login-link" target="_blank">Login</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Checkout Section -->
+    <section class="checkout-section">
+        <div class="container">
+            <div class="checkout-content">
+                <div class="checkout-header">
+                    <h1>Complete Your Subscription</h1>
+                    <p>You're almost ready to start using Chimeo!</p>
+                </div>
+                
+                <div class="checkout-card">
+                    <div class="plan-summary">
+                        <h3 id="plan-name">Pro Plan</h3>
+                        <div class="plan-price">
+                            <span class="currency">$</span>
+                            <span class="amount" id="plan-price">10</span>
+                            <span class="period">/month</span>
+                        </div>
+                        <div class="plan-features">
+                            <ul>
+                                <li><i class="fas fa-check"></i> 2 organization admins</li>
+                                <li><i class="fas fa-check"></i> 5 groups</li>
+                                <li><i class="fas fa-check"></i> 100 alerts per month</li>
+                                <li><i class="fas fa-check"></i> Full web browser access</li>
+                                <li><i class="fas fa-check"></i> Advanced push notifications</li>
+                                <li><i class="fas fa-check"></i> Priority email support</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-section">
+                        <h3>Payment Information</h3>
+                        <div class="payment-form">
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" placeholder="your@email.com" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="card-number">Card Number</label>
+                                <input type="text" id="card-number" placeholder="1234 5678 9012 3456" required>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="expiry">Expiry Date</label>
+                                    <input type="text" id="expiry" placeholder="MM/YY" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cvc">CVC</label>
+                                    <input type="text" id="cvc" placeholder="123" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="name">Cardholder Name</label>
+                                <input type="text" id="name" placeholder="John Doe" required>
+                            </div>
+                            
+                            <button class="btn btn-primary btn-large checkout-btn" id="checkout-btn">
+                                <i class="fas fa-lock"></i> Complete Payment - $<span id="total-price">10</span>/month
+                            </button>
+                            
+                            <p class="security-note">
+                                <i class="fas fa-shield-alt"></i> Your payment information is secure and encrypted
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="checkout-footer">
+                    <p><a href="pricing.html">← Back to Pricing</a></p>
+                    <p>By completing this purchase, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const plan = urlParams.get('plan') || 'pro';
+        const price = urlParams.get('price') || '1000';
+        
+        // Update page content based on plan
+        const planData = {
+            pro: {
+                name: 'Pro Plan',
+                price: '10',
+                features: [
+                    '2 organization admins',
+                    '5 groups',
+                    '100 alerts per month',
+                    'Full web browser access',
+                    'Advanced push notifications',
+                    'Priority email support'
+                ]
+            },
+            premium: {
+                name: 'Premium Plan',
+                price: '25',
+                features: [
+                    '10+ organization admins',
+                    '25 groups',
+                    '500 alerts per month',
+                    'Full web browser access',
+                    'Premium push notifications',
+                    'Priority phone & email support',
+                    'Advanced scheduling',
+                    'Emergency alert system'
+                ]
+            }
+        };
+        
+        const selectedPlan = planData[plan] || planData.pro;
+        
+        // Update page content
+        document.getElementById('plan-name').textContent = selectedPlan.name;
+        document.getElementById('plan-price').textContent = selectedPlan.price;
+        document.getElementById('total-price').textContent = selectedPlan.price;
+        
+        // Update features list
+        const featuresList = document.querySelector('.plan-features ul');
+        featuresList.innerHTML = selectedPlan.features.map(feature => 
+            `<li><i class="fas fa-check"></i> ${feature}</li>`
+        ).join('');
+        
+        // Stripe Checkout URLs (replace with your actual Stripe Checkout URLs from Stripe Dashboard)
+        const stripeCheckoutUrls = {
+            pro: {
+                monthly: 'https://buy.stripe.com/test_pro_monthly_url', // Pro $10/month
+                annual: 'https://buy.stripe.com/test_pro_annual_url'    // Pro $100/year
+            },
+            premium: {
+                monthly: 'https://buy.stripe.com/test_premium_monthly_url', // Premium $25/month
+                annual: 'https://buy.stripe.com/test_premium_annual_url'    // Premium $250/year
+            }
+        };
+        
+        // Handle checkout button click
+        document.getElementById('checkout-btn').addEventListener('click', function() {
+            // Add loading state
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Redirecting to Stripe...';
+            this.disabled = true;
+            
+            // Check if annual billing is selected (from URL or toggle)
+            const urlParams = new URLSearchParams(window.location.search);
+            const isAnnual = urlParams.get('annual') === 'true' || 
+                           (document.getElementById('billing-toggle') && document.getElementById('billing-toggle').checked);
+            
+            // Redirect to Stripe Checkout
+            if (stripeCheckoutUrls[plan]) {
+                const billingType = isAnnual ? 'annual' : 'monthly';
+                window.location.href = stripeCheckoutUrls[plan][billingType];
+            } else {
+                // Fallback: show demo success
+                setTimeout(() => {
+                    window.location.href = 'success.html?plan=' + plan;
+                }, 2000);
+            }
+        });
+        
+        // Auto-redirect after 3 seconds if user doesn't click
+        setTimeout(() => {
+            if (stripeCheckoutUrls[plan]) {
+                window.location.href = stripeCheckoutUrls[plan];
+            }
+        }, 3000);
+    </script>
+</body>
+</html>

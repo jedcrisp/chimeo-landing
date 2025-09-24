@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful - Chimeo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Chimeo</h2>
+                <div class="logo-icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="about.html" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="pricing.html" class="nav-link">Pricing</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://chimeo.app" class="nav-link login-link" target="_blank">Login</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Success Section -->
+    <section class="success-section">
+        <div class="container">
+            <div class="success-content">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h1>Payment Successful!</h1>
+                <p class="success-message">Welcome to Chimeo! Your subscription is now active and ready to use.</p>
+                
+                <div class="success-details">
+                    <div class="detail-card">
+                        <h3>What's Next?</h3>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Check your email for confirmation</li>
+                            <li><i class="fas fa-check"></i> Access your dashboard at chimeo.app</li>
+                            <li><i class="fas fa-check"></i> Start sending notifications to your community</li>
+                            <li><i class="fas fa-check"></i> Invite team members to your organization</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="success-actions">
+                    <a href="https://chimeo.app" class="btn btn-primary btn-large">
+                        <i class="fas fa-tachometer-alt"></i> Go to Dashboard
+                    </a>
+                    <a href="index.html" class="btn btn-outline">
+                        <i class="fas fa-home"></i> Back to Home
+                    </a>
+                </div>
+                
+                <div class="success-footer">
+                    <p>Need help getting started? <a href="mailto:support@chimeo.app">Contact our support team</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .success-section {
+            padding: 120px 0 80px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .success-content {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            color: white;
+        }
+        
+        .success-content h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .success-message {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+        
+        .success-details {
+            margin-bottom: 3rem;
+        }
+        
+        .detail-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: left;
+        }
+        
+        .detail-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .detail-card ul {
+            list-style: none;
+        }
+        
+        .detail-card li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .detail-card li i {
+            color: #10b981;
+            margin-right: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .success-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .success-footer {
+            opacity: 0.8;
+        }
+        
+        .success-footer a {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .success-content h1 {
+                font-size: 2rem;
+            }
+            
+            .success-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</body>
+</html>

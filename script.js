@@ -293,3 +293,70 @@ function lazyLoadImages() {
 
 // Initialize lazy loading
 document.addEventListener('DOMContentLoaded', lazyLoadImages);
+
+// Stripe Payment Integration
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle Stripe payment buttons
+    const stripeButtons = document.querySelectorAll('.stripe-button');
+    
+    stripeButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const plan = this.getAttribute('data-plan');
+            const price = this.getAttribute('data-price');
+            
+            if (plan === 'free') {
+                // Handle free trial signup
+                handleFreeTrial();
+            } else {
+                // Handle paid subscription - redirect to Stripe Checkout
+                handlePaidSubscription(plan, price);
+            }
+        });
+    });
+    
+    function handleFreeTrial() {
+        // Redirect to signup page
+        window.location.href = 'https://chimeo.app/signup?plan=free';
+    }
+    
+    function handlePaidSubscription(plan, price) {
+        // Add loading state
+        const button = event.target;
+        const originalText = button.textContent;
+        button.textContent = 'Loading...';
+        button.disabled = true;
+        
+        // Stripe Checkout URLs (replace with your actual Stripe Checkout URLs from Stripe Dashboard)
+        const stripeCheckoutUrls = {
+            pro: {
+                monthly: 'https://buy.stripe.com/test_pro_monthly_url', // Pro $10/month
+                annual: 'https://buy.stripe.com/test_pro_annual_url'    // Pro $100/year
+            },
+            premium: {
+                monthly: 'https://buy.stripe.com/test_premium_monthly_url', // Premium $25/month
+                annual: 'https://buy.stripe.com/test_premium_annual_url'    // Premium $250/year
+            }
+        };
+        
+        // Check if annual billing is selected
+        const billingToggle = document.getElementById('billing-toggle');
+        const isAnnual = billingToggle ? billingToggle.checked : false;
+        
+        // Redirect directly to Stripe Checkout
+        if (stripeCheckoutUrls[plan]) {
+            const billingType = isAnnual ? 'annual' : 'monthly';
+            window.location.href = stripeCheckoutUrls[plan][billingType];
+        } else {
+            // Fallback: redirect to checkout page
+            window.location.href = `checkout.html?plan=${plan}&price=${price}`;
+        }
+        
+        // Re-enable button after 2 seconds if redirect fails
+        setTimeout(() => {
+            button.textContent = originalText;
+            button.disabled = false;
+        }, 2000);
+    }
+});

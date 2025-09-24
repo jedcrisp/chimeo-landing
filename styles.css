@@ -239,6 +239,47 @@ body {
     font-size: 1.1rem;
 }
 
+/* Stripe Button Styles */
+.stripe-button {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.stripe-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.stripe-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.stripe-button:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+/* Stripe loading animation */
+.stripe-button.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: stripe-spin 1s linear infinite;
+}
+
+@keyframes stripe-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 /* Features Section */
 .features {
     padding: 80px 0;
