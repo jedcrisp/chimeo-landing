@@ -1274,6 +1274,29 @@ input:checked + .slider:before {
     margin: 0;
 }
 
+textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 80px;
+    transition: border-color 0.3s ease;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+textarea::placeholder {
+    color: #94a3b8;
+    font-style: italic;
+}
+
 .checkbox-group {
     margin-bottom: 1rem;
 }

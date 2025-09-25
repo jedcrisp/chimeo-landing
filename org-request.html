@@ -93,6 +93,17 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="org-description">What does your organization do? *</label>
+                        <textarea id="org-description" name="orgDescription" required placeholder="Briefly describe your organization's mission, services, or activities (e.g., 'We provide educational services to students in grades K-12' or 'We serve our local community through worship and outreach programs')" rows="3"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="org-website">Organization Website</label>
+                        <input type="url" id="org-website" name="orgWebsite" placeholder="https://www.yourorganization.com">
+                        <small class="field-help">Optional: Your organization's website URL</small>
+                    </div>
+
+                    <div class="form-group">
                         <label for="org-street">Street Address *</label>
                         <input type="text" id="org-street" name="orgStreet" required placeholder="123 Main Street">
                     </div>
@@ -121,6 +132,12 @@
                         <label for="office-email">Office Email *</label>
                         <input type="email" id="office-email" name="officeEmail" required placeholder="office@organization.com">
                         <small class="field-help">This email will be displayed on the organizational profile dashboard</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="admin-password">Create Password *</label>
+                        <input type="password" id="admin-password" name="adminPassword" required placeholder="Create a secure password for your admin account">
+                        <small class="field-help">This password will be used to access your Chimeo admin account once approved</small>
                     </div>
 
                     <div class="form-group">
