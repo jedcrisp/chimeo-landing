@@ -394,8 +394,20 @@ document.addEventListener('DOMContentLoaded', function() {
         const orgData = Object.fromEntries(formData.entries());
         
         // Validate required fields
-        const requiredFields = ['orgName', 'orgType', 'orgDescription', 'orgStreet', 'orgCity', 'orgState', 'orgZip', 'contactName', 'officeEmail', 'adminPassword', 'contactEmail', 'contactPhone', 'orgSize', 'expectedUsage', 'useCase', 'termsAgreement'];
+        const requiredFields = ['orgName', 'orgType', 'orgDescription', 'orgStreet', 'orgCity', 'orgState', 'orgZip', 'contactName', 'officeEmail', 'adminPassword', 'confirmPassword', 'contactEmail', 'contactPhone', 'orgSize', 'expectedUsage', 'useCase', 'termsAgreement'];
         const missingFields = requiredFields.filter(field => !orgData[field]);
+        
+        // Validate password confirmation
+        if (orgData.adminPassword !== orgData.confirmPassword) {
+            alert('Passwords do not match. Please make sure both password fields are identical.');
+            return;
+        }
+        
+        // Validate password strength
+        if (orgData.adminPassword.length < 8) {
+            alert('Password must be at least 8 characters long.');
+            return;
+        }
         
         // If "other" is selected, also require the otherOrgType field
         if (orgData.orgType === 'other' && !orgData.otherOrgType) {
@@ -422,6 +434,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Combine address fields for full address
                 const fullAddress = `${orgData.orgStreet}, ${orgData.orgCity}, ${orgData.orgState} ${orgData.orgZip}`;
                 
+                // Create Firebase Auth account
+                let userCredential;
+                try {
+                    userCredential = await window.createUserWithEmailAndPassword(
+                        window.auth, 
+                        orgData.contactEmail, 
+                        orgData.adminPassword
+                    );
+                    console.log('Firebase Auth account created:', userCredential.user.uid);
+                } catch (error) {
+                    console.error('Error creating Firebase Auth account:', error);
+                    if (error.code === 'auth/email-already-in-use') {
+                        alert('An account with this email already exists. Please use a different email or try logging in.');
+                        return;
+                    } else {
+                        alert('Error creating account. Please try again.');
+                        return;
+                    }
+                }
+
                 const orgRequestData = {
                     ...orgData,
                     orgType: finalOrgType, // Use the processed organization type
@@ -434,6 +466,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         state: orgData.orgState,
                         zip: orgData.orgZip
                     },
+                    // Firebase Auth integration
+                    firebaseUID: userCredential.user.uid,
+                    emailVerified: false,
                     status: 'pending',
                     submittedAt: window.serverTimestamp(),
                     trialStartDate: null,
@@ -558,6 +593,65 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Show success message
         showOrgRequestSuccess();
+    }
+
+    // Handle approved organization
+    async function handleApprovedOrganization(orgData, requestId, plan, price) {
+        console.log('Organization approved:', orgData);
+        
+        // Set trial status
+        const trialStartDate = new Date();
+        const trialEndDate = new Date();
+        trialEndDate.setDate(trialEndDate.getDate() + 30);
+        
+        // Update local storage
+        localStorage.setItem('orgRequestSubmitted', 'true');
+        localStorage.setItem('orgRequestEmail', orgData.contactEmail);
+        localStorage.setItem('orgRequestId', requestId);
+        localStorage.setItem('currentTier', 'premium_trial');
+        localStorage.setItem('trialStartDate', trialStartDate.toISOString());
+        localStorage.setItem('trialEndDate', trialEndDate.toISOString());
+        
+        // Update Firestore
+        try {
+            const orgRef = window.doc(window.db, 'organizationRequests', requestId);
+            await window.updateDoc(orgRef, {
+                status: 'approved',
+                currentTier: 'premium_trial',
+                trialStartDate: trialStartDate,
+                trialEndDate: trialEndDate,
+                approvedAt: window.serverTimestamp(),
+                approvedBy: 'admin' // This would be the actual admin user ID
+            });
+            
+            // Also create/update user document with Firebase Auth UID
+            const userRef = window.doc(window.db, 'users', orgData.firebaseUID || orgData.contactEmail);
+            await window.setDoc(userRef, {
+                email: orgData.contactEmail,
+                firebaseUID: orgData.firebaseUID,
+                organizationId: requestId,
+                currentTier: 'premium_trial',
+                trialStartDate: trialStartDate,
+                trialEndDate: trialEndDate,
+                accountEnabled: true, // Account is now active
+                lastUpdated: window.serverTimestamp()
+            }, { merge: true });
+            
+            console.log('Organization approved and trial started');
+            
+            // Send trial started notification with login instructions
+            sendTrialStartedNotification(orgData.contactEmail, orgData.orgName, orgData.firebaseUID);
+            
+            // Show success message
+            showTrialStartedMessage(orgData.orgName, trialEndDate);
+            
+            // Schedule trial expiration check
+            scheduleTrialExpirationCheck(requestId, trialEndDate);
+            
+        } catch (error) {
+            console.error('Error updating approved organization:', error);
+            alert('Error processing approval. Please contact support.');
+        }
     }
 
     // Handle organization request - automatically start 30-day Premium trial
@@ -709,19 +803,20 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Send trial started notification
-    async function sendTrialStartedNotification(orgData, trialEndDate) {
+    async function sendTrialStartedNotification(email, orgName, firebaseUID) {
         // In a real implementation, this would call your backend API
-        console.log('Sending trial started notification to:', orgData.contactEmail);
+        console.log('Sending trial started notification to:', email);
         
         const emailData = {
-            to: orgData.contactEmail,
+            to: email,
             subject: 'Welcome to Chimeo! Your 30-Day Premium Trial Has Started',
             template: 'trial_started',
             data: {
-                organizationName: orgData.orgName,
-                contactName: orgData.contactName,
-                trialEndDate: trialEndDate.toLocaleDateString(),
-                loginUrl: 'https://chimeo.app/login'
+                organizationName: orgName,
+                email: email,
+                firebaseUID: firebaseUID,
+                loginUrl: 'https://chimeo.app/login',
+                message: `Your organization "${orgName}" has been approved! You can now log in to Chimeo using your email and password to access all Premium features.`
             }
         };
         
