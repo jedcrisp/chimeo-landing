@@ -474,17 +474,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function showOrgRequestSuccess() {
         const successMessage = `
-            <div style="text-align: center; padding: 2rem; background: #f0f9ff; border: 2px solid #0ea5e9; border-radius: 12px; margin: 2rem 0;">
-                <i class="fas fa-check-circle" style="font-size: 3rem; color: #0ea5e9; margin-bottom: 1rem;"></i>
-                <h2 style="color: #0c4a6e; margin-bottom: 1rem;">Organization Request Submitted!</h2>
-                <p style="color: #0c4a6e; margin-bottom: 1.5rem;">Thank you for your interest in Chimeo. We'll review your organization request within 24 hours and send you an email with next steps.</p>
+            <div style="text-align: center; padding: 2rem; background: #f0fdf4; border: 2px solid #10b981; border-radius: 12px; margin: 2rem 0;">
+                <i class="fas fa-rocket" style="font-size: 3rem; color: #10b981; margin-bottom: 1rem;"></i>
+                <h2 style="color: #065f46; margin-bottom: 1rem;">Welcome to Chimeo!</h2>
+                <p style="color: #065f46; margin-bottom: 1rem;">Your organization has been approved and you now have access to a 30-day Premium trial.</p>
                 <div style="background: #ecfdf5; border: 1px solid #10b981; border-radius: 8px; padding: 1rem; margin: 1rem 0;">
-                    <i class="fas fa-gift" style="color: #10b981; margin-right: 0.5rem;"></i>
-                    <strong style="color: #065f46;">Once approved, you'll receive a 30-day Premium trial!</strong>
+                    <strong style="color: #065f46;">Trial ends: ${new Date(Date.now() + (30 * 24 * 60 * 60 * 1000)).toLocaleDateString()}</strong>
                 </div>
-                <button onclick="window.location.href='pricing.html'" style="background: #0ea5e9; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer;">
-                    Return to Pricing
-                </button>
+                <div style="background: #fef3c7; border: 1px solid #d97706; border-radius: 8px; padding: 1rem; margin: 1rem 0;">
+                    <i class="fas fa-info-circle" style="color: #d97706; margin-right: 0.5rem;"></i>
+                    <strong style="color: #92400e;">After your trial, you'll need to choose a Pro or Premium plan to continue using Chimeo.</strong>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem;">
+                    <button onclick="window.location.href='https://chimeo.app/login'" style="background: #10b981; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                        Start Your Trial
+                        <br><small style="font-size: 0.8rem; opacity: 0.9;">From the web or iOS app</small>
+                    </button>
+                    <button onclick="window.location.href='pricing.html'" style="background: #6b7280; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                        View Pricing Plans
+                    </button>
+                </div>
             </div>
         `;
         
@@ -643,6 +652,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem;">
                     <button onclick="window.location.href='https://chimeo.app/login'" style="background: #10b981; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer;">
                         Start Your Trial
+                        <br><small style="font-size: 0.8rem; opacity: 0.9;">From the web or iOS app</small>
                     </button>
                     <button onclick="window.location.href='pricing.html'" style="background: #6b7280; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer;">
                         View Pricing Plans
