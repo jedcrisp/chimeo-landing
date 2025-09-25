@@ -324,6 +324,28 @@ document.addEventListener('DOMContentLoaded', function() {
     const orgForm = document.getElementById('org-request-form');
     if (orgForm) {
         orgForm.addEventListener('submit', handleOrgRequestSubmission);
+        
+        // Handle organization type change
+        const orgTypeSelect = document.getElementById('org-type');
+        const otherOrgTypeGroup = document.getElementById('other-org-type-group');
+        const otherOrgTypeInput = document.getElementById('other-org-type');
+        
+        if (orgTypeSelect && otherOrgTypeGroup && otherOrgTypeInput) {
+            orgTypeSelect.addEventListener('change', function() {
+                if (this.value === 'other') {
+                    otherOrgTypeGroup.style.display = 'block';
+                    otherOrgTypeGroup.classList.add('show');
+                    otherOrgTypeInput.required = true;
+                    // Focus on the input field for better UX
+                    setTimeout(() => otherOrgTypeInput.focus(), 100);
+                } else {
+                    otherOrgTypeGroup.style.display = 'none';
+                    otherOrgTypeGroup.classList.remove('show');
+                    otherOrgTypeInput.required = false;
+                    otherOrgTypeInput.value = '';
+                }
+            });
+        }
     }
     
     function handleFreeTrial() {
@@ -375,6 +397,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const requiredFields = ['orgName', 'orgType', 'orgAddress', 'contactName', 'contactEmail', 'contactPhone', 'orgSize', 'expectedUsage', 'useCase', 'termsAgreement'];
         const missingFields = requiredFields.filter(field => !orgData[field]);
         
+        // If "other" is selected, also require the otherOrgType field
+        if (orgData.orgType === 'other' && !orgData.otherOrgType) {
+            missingFields.push('otherOrgType');
+        }
+        
         if (missingFields.length > 0) {
             alert('Please fill in all required fields.');
             return;
@@ -389,8 +416,13 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Store in Firestore
             if (window.db) {
+                // Process organization type - if "other" is selected, use the custom input
+                const finalOrgType = orgData.orgType === 'other' ? orgData.otherOrgType : orgData.orgType;
+                
                 const orgRequestData = {
                     ...orgData,
+                    orgType: finalOrgType, // Use the processed organization type
+                    originalOrgType: orgData.orgType, // Keep original selection for reference
                     status: 'pending',
                     submittedAt: window.serverTimestamp(),
                     trialStartDate: null,

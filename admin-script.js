@@ -376,6 +376,7 @@ function formatOrgType(type) {
         'business': 'Business',
         'other': 'Other'
     };
+    // If it's not in our predefined list, it's likely a custom "other" type
     return types[type] || type;
 }
 
