@@ -358,17 +358,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function checkOrgRequestStatus(plan, price) {
-        // Check if user has already submitted organization request
-        const orgRequestSubmitted = localStorage.getItem('orgRequestSubmitted');
-        const orgRequestEmail = localStorage.getItem('orgRequestEmail');
-        
-        if (orgRequestSubmitted && orgRequestEmail) {
-            // Check if organization request was approved
-            checkOrgApprovalStatus(orgRequestEmail, plan, price);
-        } else {
-            // Redirect to organization request form (required for all users)
-            window.location.href = `org-request.html?plan=${plan}&price=${price}`;
-        }
+        // Always redirect to organization request form (required for all users)
+        // Don't check localStorage as it's not reliable without authentication
+        window.location.href = `org-request.html?plan=${plan}&price=${price}`;
     }
 
     function checkOrgApprovalStatus(email, plan, price) {
@@ -485,14 +477,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 const docRef = await window.addDoc(window.collection(window.db, 'organizationRequests'), orgRequestData);
                 console.log('Organization request submitted with ID:', docRef.id);
                 
-                // Store locally for immediate UI updates
-                localStorage.setItem('orgRequestSubmitted', 'true');
-                localStorage.setItem('orgRequestEmail', orgData.contactEmail);
-                localStorage.setItem('orgRequestId', docRef.id);
-                localStorage.setItem('orgRequestData', JSON.stringify(orgData));
-                
                 // Store organization request for approval
                 await storeOrganizationRequest(orgData, docRef.id);
+                
+                // Show success message
+                showOrgRequestSuccess();
             } else {
                 // Fallback to localStorage if Firestore not available
                 localStorage.setItem('orgRequestSubmitted', 'true');
