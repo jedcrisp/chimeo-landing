@@ -289,13 +289,14 @@
 
         // Firebase configuration
         const firebaseConfig = {
-            // Add your Firebase config here
-            apiKey: "your-api-key",
-            authDomain: "your-project.firebaseapp.com",
-            projectId: "your-project-id",
-            storageBucket: "your-project.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "your-app-id"
+            apiKey: "AIzaSyA96jGLzCUMVe9FHHS1lQ8vdbi8DFhAs6o",
+            authDomain: "chimeo-96dfc.firebaseapp.com",
+            databaseURL: "https://chimeo-96dfc-default-rtdb.firebaseio.com",
+            projectId: "chimeo-96dfc",
+            storageBucket: "chimeo-96dfc.firebasestorage.app",
+            messagingSenderId: "280448574070",
+            appId: "1:280448574070:web:9cb5298f2f0b10770a7557",
+            measurementId: "G-GCSQ5KSTF0"
         };
 
         // Initialize Firebase
@@ -313,6 +314,8 @@
         window.getDoc = getDoc;
         window.updateDoc = updateDoc;
         window.serverTimestamp = serverTimestamp;
+        window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
     </script>
     <script src="./script.js?v=6"></script>
 </body>
