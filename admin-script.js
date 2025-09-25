@@ -225,12 +225,6 @@ function showRequestDetails(requestId) {
                 </div>
             </div>
 
-            ${request.additionalInfo ? `
-                <div class="detail-section">
-                    <h3>Additional Information</h3>
-                    <p>${request.additionalInfo}</p>
-                </div>
-            ` : ''}
 
             <div class="detail-section">
                 <h3>Request Status</h3>
