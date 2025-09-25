@@ -181,7 +181,10 @@ function showRequestDetails(requestId) {
                     </div>
                     <div class="detail-item">
                         <label>Address:</label>
-                        <span>${request.orgAddress}</span>
+                        <span>${request.address ? 
+                            `${request.address.street}, ${request.address.city}, ${request.address.state} ${request.address.zip}` : 
+                            request.orgAddress || 'N/A'
+                        }</span>
                     </div>
                 </div>
             </div>

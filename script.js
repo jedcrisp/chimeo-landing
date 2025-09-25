@@ -394,7 +394,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const orgData = Object.fromEntries(formData.entries());
         
         // Validate required fields
-        const requiredFields = ['orgName', 'orgType', 'orgAddress', 'contactName', 'contactEmail', 'contactPhone', 'orgSize', 'expectedUsage', 'useCase', 'termsAgreement'];
+        const requiredFields = ['orgName', 'orgType', 'orgStreet', 'orgCity', 'orgState', 'orgZip', 'contactName', 'contactEmail', 'contactPhone', 'orgSize', 'expectedUsage', 'useCase', 'termsAgreement'];
         const missingFields = requiredFields.filter(field => !orgData[field]);
         
         // If "other" is selected, also require the otherOrgType field
@@ -419,10 +419,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Process organization type - if "other" is selected, use the custom input
                 const finalOrgType = orgData.orgType === 'other' ? orgData.otherOrgType : orgData.orgType;
                 
+                // Combine address fields for full address
+                const fullAddress = `${orgData.orgStreet}, ${orgData.orgCity}, ${orgData.orgState} ${orgData.orgZip}`;
+                
                 const orgRequestData = {
                     ...orgData,
                     orgType: finalOrgType, // Use the processed organization type
                     originalOrgType: orgData.orgType, // Keep original selection for reference
+                    orgAddress: fullAddress, // Combined full address
+                    // Keep individual address fields for better data structure
+                    address: {
+                        street: orgData.orgStreet,
+                        city: orgData.orgCity,
+                        state: orgData.orgState,
+                        zip: orgData.orgZip
+                    },
                     status: 'pending',
                     submittedAt: window.serverTimestamp(),
                     trialStartDate: null,

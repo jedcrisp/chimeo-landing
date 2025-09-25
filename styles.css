@@ -1240,6 +1240,17 @@ input:checked + .slider:before {
     background: #f0f4ff;
 }
 
+.address-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.address-row .form-group {
+    margin-bottom: 0;
+}
+
 .checkbox-group {
     margin-bottom: 1rem;
 }
@@ -1348,6 +1359,11 @@ input:checked + .slider:before {
     .info-step {
         flex-direction: column;
         text-align: center;
+    }
+    
+    .address-row {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
     }
 }
 
