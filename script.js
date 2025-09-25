@@ -409,11 +409,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem('orgRequestId', docRef.id);
                 localStorage.setItem('orgRequestData', JSON.stringify(orgData));
                 
-                // Send email notification to admin (in real implementation)
-                await sendOrgRequestNotification(orgData, docRef.id);
-                
-                // Show success message
-                showOrgRequestSuccess();
+                // Automatically start 30-day Premium trial
+                await handleOrganizationRequest(orgData, docRef.id);
             } else {
                 // Fallback to localStorage if Firestore not available
                 localStorage.setItem('orgRequestSubmitted', 'true');
@@ -510,8 +507,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Handle approved organization - start 30-day Premium trial
-    async function handleApprovedOrganization(orgData, requestId, plan, price) {
+    // Handle organization request - automatically start 30-day Premium trial
+    async function handleOrganizationRequest(orgData, requestId) {
         const now = new Date();
         const trialEndDate = new Date(now.getTime() + (30 * 24 * 60 * 60 * 1000)); // 30 days from now
         
@@ -525,7 +522,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     trialStartDate: window.serverTimestamp(),
                     trialEndDate: trialEndDate,
                     approvedAt: window.serverTimestamp(),
-                    approvedBy: 'admin' // In real implementation, this would be the actual admin ID
+                    approvedBy: 'automatic' // Automatic approval
                 });
                 
                 // Create user account in Firestore
@@ -544,23 +541,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 const userRef = window.doc(window.db, 'users', orgData.contactEmail);
                 await window.setDoc(userRef, userData);
                 
-                // Send approval email notification
-                await sendApprovalNotification(orgData, trialEndDate);
+                // Send trial started email notification
+                await sendTrialStartedNotification(orgData, trialEndDate);
                 
                 // Start trial expiration check
                 scheduleTrialExpirationCheck(orgData.contactEmail, trialEndDate);
                 
-                // Proceed to payment or show trial success
+                // Show trial started message
                 showTrialStartedMessage(orgData, trialEndDate);
             } else {
                 // Fallback to localStorage
                 localStorage.setItem(`orgApproved_${orgData.contactEmail}`, 'true');
                 localStorage.setItem(`trialEndDate_${orgData.contactEmail}`, trialEndDate.toISOString());
-                handlePaidSubscription(plan, price);
+                showTrialStartedMessage(orgData, trialEndDate);
             }
         } catch (error) {
-            console.error('Error handling approved organization:', error);
-            alert('There was an error processing your approval. Please contact support.');
+            console.error('Error processing organization request:', error);
+            alert('There was an error processing your request. Please try again.');
         }
     }
 
@@ -590,17 +587,21 @@ document.addEventListener('DOMContentLoaded', function() {
         const trialMessage = `
             <div style="text-align: center; padding: 2rem; background: #f0fdf4; border: 2px solid #10b981; border-radius: 12px; margin: 2rem 0;">
                 <i class="fas fa-rocket" style="font-size: 3rem; color: #10b981; margin-bottom: 1rem;"></i>
-                <h2 style="color: #065f46; margin-bottom: 1rem;">Congratulations! Your Organization is Approved!</h2>
-                <p style="color: #065f46; margin-bottom: 1rem;">You now have access to a 30-day Premium trial of Chimeo.</p>
+                <h2 style="color: #065f46; margin-bottom: 1rem;">Welcome to Chimeo!</h2>
+                <p style="color: #065f46; margin-bottom: 1rem;">Your organization has been approved and you now have access to a 30-day Premium trial.</p>
                 <div style="background: #ecfdf5; border: 1px solid #10b981; border-radius: 8px; padding: 1rem; margin: 1rem 0;">
                     <strong style="color: #065f46;">Trial ends: ${trialEndDate.toLocaleDateString()}</strong>
+                </div>
+                <div style="background: #fef3c7; border: 1px solid #d97706; border-radius: 8px; padding: 1rem; margin: 1rem 0;">
+                    <i class="fas fa-info-circle" style="color: #d97706; margin-right: 0.5rem;"></i>
+                    <strong style="color: #92400e;">After your trial, you'll need to choose a Pro or Premium plan to continue using Chimeo.</strong>
                 </div>
                 <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem;">
                     <button onclick="window.location.href='https://chimeo.app/login'" style="background: #10b981; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer;">
                         Start Your Trial
                     </button>
                     <button onclick="window.location.href='pricing.html'" style="background: #6b7280; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer;">
-                        View Pricing
+                        View Pricing Plans
                     </button>
                 </div>
             </div>
@@ -621,7 +622,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Check if trial has expired and downgrade to Free tier
+    // Check if trial has expired and require payment
     async function checkTrialExpiration(email) {
         try {
             if (window.db) {
@@ -634,17 +635,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     const trialEndDate = userData.trialEndDate.toDate();
                     
                     if (now > trialEndDate && userData.currentTier === 'premium_trial') {
-                        // Downgrade to Free tier
+                        // Mark trial as expired and require payment
                         await window.updateDoc(userRef, {
-                            currentTier: 'free',
-                            subscriptionStatus: 'active',
-                            downgradedAt: window.serverTimestamp()
+                            currentTier: 'trial_expired',
+                            subscriptionStatus: 'trial_expired',
+                            trialExpiredAt: window.serverTimestamp()
                         });
                         
-                        // Send expiration notification
-                        await sendTrialExpirationNotification(email, userData.organizationName);
+                        // Send payment required notification
+                        await sendPaymentRequiredNotification(email, userData.organizationName);
                         
-                        console.log('Trial expired for user:', email);
+                        console.log('Trial expired for user:', email, '- Payment required');
                     }
                 }
             }
@@ -653,22 +654,42 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Send trial expiration notification
-    async function sendTrialExpirationNotification(email, organizationName) {
+    // Send trial started notification
+    async function sendTrialStartedNotification(orgData, trialEndDate) {
         // In a real implementation, this would call your backend API
-        console.log('Sending trial expiration notification to:', email);
+        console.log('Sending trial started notification to:', orgData.contactEmail);
         
         const emailData = {
-            to: email,
-            subject: 'Your Chimeo Premium Trial Has Ended',
-            template: 'trial_expiration',
+            to: orgData.contactEmail,
+            subject: 'Welcome to Chimeo! Your 30-Day Premium Trial Has Started',
+            template: 'trial_started',
             data: {
-                organizationName: organizationName,
-                upgradeUrl: 'https://chimeo.app/pricing'
+                organizationName: orgData.orgName,
+                contactName: orgData.contactName,
+                trialEndDate: trialEndDate.toLocaleDateString(),
+                loginUrl: 'https://chimeo.app/login'
             }
         };
         
-        console.log('Trial expiration email data:', emailData);
+        console.log('Trial started email data:', emailData);
+    }
+
+    // Send payment required notification
+    async function sendPaymentRequiredNotification(email, organizationName) {
+        // In a real implementation, this would call your backend API
+        console.log('Sending payment required notification to:', email);
+        
+        const emailData = {
+            to: email,
+            subject: 'Your Chimeo Trial Has Ended - Choose Your Plan',
+            template: 'payment_required',
+            data: {
+                organizationName: organizationName,
+                pricingUrl: 'https://chimeo.app/pricing'
+            }
+        };
+        
+        console.log('Payment required email data:', emailData);
     }
 
     function showOrgRejectedMessage() {
