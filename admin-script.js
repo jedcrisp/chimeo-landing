@@ -103,7 +103,7 @@ function renderRequests(requests = null) {
             <div class="request-details">
                 <div class="detail-row">
                     <span class="label">Contact:</span>
-                    <span class="value">${request.contactName} (${request.contactEmail})</span>
+                    <span class="value">${request.contactName} (${request.officeEmail || request.contactEmail})</span>
                 </div>
                 <div class="detail-row">
                     <span class="label">Size:</span>
@@ -197,7 +197,11 @@ function showRequestDetails(requestId) {
                         <span>${request.contactName}</span>
                     </div>
                     <div class="detail-item">
-                        <label>Email:</label>
+                        <label>Office Email:</label>
+                        <span>${request.officeEmail || request.contactEmail}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>Admin Email:</label>
                         <span>${request.contactEmail}</span>
                     </div>
                     <div class="detail-item">

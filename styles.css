@@ -1251,6 +1251,14 @@ input:checked + .slider:before {
     margin-bottom: 0;
 }
 
+.field-help {
+    display: block;
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-top: 0.25rem;
+    font-style: italic;
+}
+
 .checkbox-group {
     margin-bottom: 1rem;
 }

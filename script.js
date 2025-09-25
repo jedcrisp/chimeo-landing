@@ -394,7 +394,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const orgData = Object.fromEntries(formData.entries());
         
         // Validate required fields
-        const requiredFields = ['orgName', 'orgType', 'orgStreet', 'orgCity', 'orgState', 'orgZip', 'contactName', 'contactEmail', 'contactPhone', 'orgSize', 'expectedUsage', 'useCase', 'termsAgreement'];
+        const requiredFields = ['orgName', 'orgType', 'orgStreet', 'orgCity', 'orgState', 'orgZip', 'contactName', 'officeEmail', 'contactEmail', 'contactPhone', 'orgSize', 'expectedUsage', 'useCase', 'termsAgreement'];
         const missingFields = requiredFields.filter(field => !orgData[field]);
         
         // If "other" is selected, also require the otherOrgType field
@@ -503,7 +503,8 @@ document.addEventListener('DOMContentLoaded', function() {
             requestId: requestId,
             organizationName: orgData.orgName,
             contactName: orgData.contactName,
-            contactEmail: orgData.contactEmail,
+            officeEmail: orgData.officeEmail,
+            adminEmail: orgData.contactEmail,
             orgType: orgData.orgType,
             submittedAt: new Date().toISOString()
         };
