@@ -2,16 +2,18 @@
 const mobileMenu = document.getElementById('mobile-menu');
 const navMenu = document.querySelector('.nav-menu');
 
-mobileMenu.addEventListener('click', () => {
-    mobileMenu.classList.toggle('active');
-    navMenu.classList.toggle('active');
-});
+if (mobileMenu && navMenu) {
+    mobileMenu.addEventListener('click', () => {
+        mobileMenu.classList.toggle('active');
+        navMenu.classList.toggle('active');
+    });
+}
 
 // Close mobile menu when clicking on a link
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', () => {
-        mobileMenu.classList.remove('active');
-        navMenu.classList.remove('active');
+        if (mobileMenu) mobileMenu.classList.remove('active');
+        if (navMenu) navMenu.classList.remove('active');
     });
 });
 
@@ -33,20 +35,22 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 const billingToggle = document.getElementById('billing-toggle');
 const priceAmounts = document.querySelectorAll('.amount');
 
-billingToggle.addEventListener('change', function() {
-    priceAmounts.forEach(amount => {
-        const monthlyPrice = amount.getAttribute('data-monthly');
-        const annualPrice = amount.getAttribute('data-annual');
-        
-        if (this.checked) {
-            // Switch to annual pricing
-            amount.textContent = annualPrice;
-        } else {
-            // Switch to monthly pricing
-            amount.textContent = monthlyPrice;
-        }
+if (billingToggle) {
+    billingToggle.addEventListener('change', function() {
+        priceAmounts.forEach(amount => {
+            const monthlyPrice = amount.getAttribute('data-monthly');
+            const annualPrice = amount.getAttribute('data-annual');
+            
+            if (this.checked) {
+                // Switch to annual pricing
+                amount.textContent = annualPrice;
+            } else {
+                // Switch to monthly pricing
+                amount.textContent = monthlyPrice;
+            }
+        });
     });
-});
+}
 
 // Navbar scroll effect
 window.addEventListener('scroll', () => {
