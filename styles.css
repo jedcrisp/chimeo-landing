@@ -1297,8 +1297,116 @@ textarea::placeholder {
     font-style: italic;
 }
 
+/* Legal Pages Styling */
+.legal-content {
+    padding: 120px 0 80px;
+    background: #f8fafc;
+    min-height: 100vh;
+}
+
+.legal-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.legal-header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 1rem;
+}
+
+.last-updated {
+    font-size: 1.1rem;
+    color: #64748b;
+    font-style: italic;
+}
+
+.legal-body {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 3rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    line-height: 1.7;
+}
+
+.legal-body h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 2.5rem 0 1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.legal-body h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #374151;
+    margin: 1.5rem 0 0.75rem 0;
+}
+
+.legal-body p {
+    font-size: 1rem;
+    color: #4b5563;
+    margin-bottom: 1.25rem;
+}
+
+.legal-body ul {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+.legal-body li {
+    font-size: 1rem;
+    color: #4b5563;
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+.legal-body strong {
+    color: #1e293b;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .legal-content {
+        padding: 100px 0 60px;
+    }
+    
+    .legal-header h1 {
+        font-size: 2.5rem;
+    }
+    
+    .legal-body {
+        padding: 2rem;
+        margin: 0 1rem;
+    }
+    
+    .legal-body h2 {
+        font-size: 1.5rem;
+    }
+    
+    .legal-body h3 {
+        font-size: 1.2rem;
+    }
+}
+
 .checkbox-group {
     margin-bottom: 1rem;
+}
+
+.checkbox-label a {
+    color: #3b82f6;
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.checkbox-label a:hover {
+    color: #2563eb;
+    text-decoration: none;
 }
 
 .checkbox-label {
