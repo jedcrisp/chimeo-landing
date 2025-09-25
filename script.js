@@ -308,8 +308,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const requiresOrg = this.getAttribute('data-requires-org');
             
             if (plan === 'free') {
-                // Handle free trial signup
-                handleFreeTrial();
+                // Handle free trial signup - now also requires org request
+                checkOrgRequestStatus(plan, price);
             } else if (requiresOrg === 'true') {
                 // Check if organization request is required
                 checkOrgRequestStatus(plan, price);
@@ -340,7 +340,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Check if organization request was approved
             checkOrgApprovalStatus(orgRequestEmail, plan, price);
         } else {
-            // Redirect to organization request form
+            // Redirect to organization request form (required for all users)
             window.location.href = `org-request.html?plan=${plan}&price=${price}`;
         }
     }
@@ -364,7 +364,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Handle organization request form submission
-    function handleOrgRequestSubmission(e) {
+    async function handleOrgRequestSubmission(e) {
         e.preventDefault();
         
         const form = e.target;
@@ -380,16 +380,56 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Store organization request data
-        localStorage.setItem('orgRequestSubmitted', 'true');
-        localStorage.setItem('orgRequestEmail', orgData.contactEmail);
-        localStorage.setItem('orgRequestData', JSON.stringify(orgData));
-        
-        // Show success message
-        showOrgRequestSuccess();
-        
-        // In a real implementation, you would send this data to your backend
-        console.log('Organization request submitted:', orgData);
+        try {
+            // Show loading state
+            const submitBtn = form.querySelector('.org-request-btn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting Request...';
+            submitBtn.disabled = true;
+            
+            // Store in Firestore
+            if (window.db) {
+                const orgRequestData = {
+                    ...orgData,
+                    status: 'pending',
+                    submittedAt: window.serverTimestamp(),
+                    trialStartDate: null,
+                    trialEndDate: null,
+                    currentTier: 'none',
+                    approvedAt: null,
+                    approvedBy: null
+                };
+                
+                const docRef = await window.addDoc(window.collection(window.db, 'organizationRequests'), orgRequestData);
+                console.log('Organization request submitted with ID:', docRef.id);
+                
+                // Store locally for immediate UI updates
+                localStorage.setItem('orgRequestSubmitted', 'true');
+                localStorage.setItem('orgRequestEmail', orgData.contactEmail);
+                localStorage.setItem('orgRequestId', docRef.id);
+                localStorage.setItem('orgRequestData', JSON.stringify(orgData));
+                
+                // Send email notification to admin (in real implementation)
+                await sendOrgRequestNotification(orgData, docRef.id);
+                
+                // Show success message
+                showOrgRequestSuccess();
+            } else {
+                // Fallback to localStorage if Firestore not available
+                localStorage.setItem('orgRequestSubmitted', 'true');
+                localStorage.setItem('orgRequestEmail', orgData.contactEmail);
+                localStorage.setItem('orgRequestData', JSON.stringify(orgData));
+                showOrgRequestSuccess();
+            }
+        } catch (error) {
+            console.error('Error submitting organization request:', error);
+            alert('There was an error submitting your request. Please try again.');
+            
+            // Reset button
+            const submitBtn = form.querySelector('.org-request-btn');
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
     }
 
     function showOrgRequestSuccess() {
@@ -398,6 +438,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 <i class="fas fa-check-circle" style="font-size: 3rem; color: #0ea5e9; margin-bottom: 1rem;"></i>
                 <h2 style="color: #0c4a6e; margin-bottom: 1rem;">Organization Request Submitted!</h2>
                 <p style="color: #0c4a6e; margin-bottom: 1.5rem;">Thank you for your interest in Chimeo. We'll review your organization request within 24 hours and send you an email with next steps.</p>
+                <div style="background: #ecfdf5; border: 1px solid #10b981; border-radius: 8px; padding: 1rem; margin: 1rem 0;">
+                    <i class="fas fa-gift" style="color: #10b981; margin-right: 0.5rem;"></i>
+                    <strong style="color: #065f46;">Once approved, you'll receive a 30-day Premium trial!</strong>
+                </div>
                 <button onclick="window.location.href='pricing.html'" style="background: #0ea5e9; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer;">
                     Return to Pricing
                 </button>
@@ -405,6 +449,230 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         
         document.querySelector('.org-request-content').innerHTML = successMessage;
+    }
+
+    // Send email notification to admin about new organization request
+    async function sendOrgRequestNotification(orgData, requestId) {
+        // In a real implementation, this would call your backend API
+        // to send an email to the admin about the new request
+        console.log('Sending notification to admin about request:', requestId);
+        
+        // For now, just log the notification
+        const notificationData = {
+            type: 'new_org_request',
+            requestId: requestId,
+            organizationName: orgData.orgName,
+            contactName: orgData.contactName,
+            contactEmail: orgData.contactEmail,
+            orgType: orgData.orgType,
+            submittedAt: new Date().toISOString()
+        };
+        
+        console.log('Admin notification data:', notificationData);
+    }
+
+    // Check organization approval status from Firestore
+    async function checkOrgApprovalStatus(email, plan, price) {
+        try {
+            if (window.db) {
+                // Query Firestore for organization request by email
+                const orgRequestsRef = window.collection(window.db, 'organizationRequests');
+                const querySnapshot = await orgRequestsRef.where('contactEmail', '==', email).get();
+                
+                if (!querySnapshot.empty) {
+                    const doc = querySnapshot.docs[0];
+                    const orgData = doc.data();
+                    
+                    if (orgData.status === 'approved') {
+                        // Organization approved, check trial status
+                        await handleApprovedOrganization(orgData, doc.id, plan, price);
+                    } else if (orgData.status === 'pending') {
+                        showOrgPendingMessage();
+                    } else if (orgData.status === 'rejected') {
+                        showOrgRejectedMessage();
+                    }
+                } else {
+                    // No organization request found, redirect to form
+                    window.location.href = `org-request.html?plan=${plan}&price=${price}`;
+                }
+            } else {
+                // Fallback to localStorage
+                const orgApproved = localStorage.getItem(`orgApproved_${email}`);
+                if (orgApproved === 'true') {
+                    handlePaidSubscription(plan, price);
+                } else {
+                    showOrgPendingMessage();
+                }
+            }
+        } catch (error) {
+            console.error('Error checking approval status:', error);
+            showOrgPendingMessage();
+        }
+    }
+
+    // Handle approved organization - start 30-day Premium trial
+    async function handleApprovedOrganization(orgData, requestId, plan, price) {
+        const now = new Date();
+        const trialEndDate = new Date(now.getTime() + (30 * 24 * 60 * 60 * 1000)); // 30 days from now
+        
+        try {
+            if (window.db) {
+                // Update organization request with trial information
+                const orgRequestRef = window.doc(window.db, 'organizationRequests', requestId);
+                await window.updateDoc(orgRequestRef, {
+                    status: 'approved',
+                    currentTier: 'premium_trial',
+                    trialStartDate: window.serverTimestamp(),
+                    trialEndDate: trialEndDate,
+                    approvedAt: window.serverTimestamp(),
+                    approvedBy: 'admin' // In real implementation, this would be the actual admin ID
+                });
+                
+                // Create user account in Firestore
+                const userData = {
+                    email: orgData.contactEmail,
+                    organizationName: orgData.orgName,
+                    organizationType: orgData.orgType,
+                    currentTier: 'premium_trial',
+                    trialStartDate: window.serverTimestamp(),
+                    trialEndDate: trialEndDate,
+                    subscriptionStatus: 'trial',
+                    createdAt: window.serverTimestamp(),
+                    lastLoginAt: window.serverTimestamp()
+                };
+                
+                const userRef = window.doc(window.db, 'users', orgData.contactEmail);
+                await window.setDoc(userRef, userData);
+                
+                // Send approval email notification
+                await sendApprovalNotification(orgData, trialEndDate);
+                
+                // Start trial expiration check
+                scheduleTrialExpirationCheck(orgData.contactEmail, trialEndDate);
+                
+                // Proceed to payment or show trial success
+                showTrialStartedMessage(orgData, trialEndDate);
+            } else {
+                // Fallback to localStorage
+                localStorage.setItem(`orgApproved_${orgData.contactEmail}`, 'true');
+                localStorage.setItem(`trialEndDate_${orgData.contactEmail}`, trialEndDate.toISOString());
+                handlePaidSubscription(plan, price);
+            }
+        } catch (error) {
+            console.error('Error handling approved organization:', error);
+            alert('There was an error processing your approval. Please contact support.');
+        }
+    }
+
+    // Send approval email notification
+    async function sendApprovalNotification(orgData, trialEndDate) {
+        // In a real implementation, this would call your backend API
+        // to send an email to the organization contact
+        console.log('Sending approval notification to:', orgData.contactEmail);
+        
+        const emailData = {
+            to: orgData.contactEmail,
+            subject: 'Your Chimeo Organization Request Has Been Approved!',
+            template: 'org_approval',
+            data: {
+                organizationName: orgData.orgName,
+                contactName: orgData.contactName,
+                trialEndDate: trialEndDate.toLocaleDateString(),
+                loginUrl: 'https://chimeo.app/login'
+            }
+        };
+        
+        console.log('Approval email data:', emailData);
+    }
+
+    // Show trial started message
+    function showTrialStartedMessage(orgData, trialEndDate) {
+        const trialMessage = `
+            <div style="text-align: center; padding: 2rem; background: #f0fdf4; border: 2px solid #10b981; border-radius: 12px; margin: 2rem 0;">
+                <i class="fas fa-rocket" style="font-size: 3rem; color: #10b981; margin-bottom: 1rem;"></i>
+                <h2 style="color: #065f46; margin-bottom: 1rem;">Congratulations! Your Organization is Approved!</h2>
+                <p style="color: #065f46; margin-bottom: 1rem;">You now have access to a 30-day Premium trial of Chimeo.</p>
+                <div style="background: #ecfdf5; border: 1px solid #10b981; border-radius: 8px; padding: 1rem; margin: 1rem 0;">
+                    <strong style="color: #065f46;">Trial ends: ${trialEndDate.toLocaleDateString()}</strong>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem;">
+                    <button onclick="window.location.href='https://chimeo.app/login'" style="background: #10b981; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                        Start Your Trial
+                    </button>
+                    <button onclick="window.location.href='pricing.html'" style="background: #6b7280; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                        View Pricing
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        document.querySelector('.org-request-content').innerHTML = trialMessage;
+    }
+
+    // Schedule trial expiration check
+    function scheduleTrialExpirationCheck(email, trialEndDate) {
+        const now = new Date();
+        const timeUntilExpiration = trialEndDate.getTime() - now.getTime();
+        
+        if (timeUntilExpiration > 0) {
+            setTimeout(async () => {
+                await checkTrialExpiration(email);
+            }, timeUntilExpiration);
+        }
+    }
+
+    // Check if trial has expired and downgrade to Free tier
+    async function checkTrialExpiration(email) {
+        try {
+            if (window.db) {
+                const userRef = window.doc(window.db, 'users', email);
+                const userDoc = await window.getDoc(userRef);
+                
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    const now = new Date();
+                    const trialEndDate = userData.trialEndDate.toDate();
+                    
+                    if (now > trialEndDate && userData.currentTier === 'premium_trial') {
+                        // Downgrade to Free tier
+                        await window.updateDoc(userRef, {
+                            currentTier: 'free',
+                            subscriptionStatus: 'active',
+                            downgradedAt: window.serverTimestamp()
+                        });
+                        
+                        // Send expiration notification
+                        await sendTrialExpirationNotification(email, userData.organizationName);
+                        
+                        console.log('Trial expired for user:', email);
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error checking trial expiration:', error);
+        }
+    }
+
+    // Send trial expiration notification
+    async function sendTrialExpirationNotification(email, organizationName) {
+        // In a real implementation, this would call your backend API
+        console.log('Sending trial expiration notification to:', email);
+        
+        const emailData = {
+            to: email,
+            subject: 'Your Chimeo Premium Trial Has Ended',
+            template: 'trial_expiration',
+            data: {
+                organizationName: organizationName,
+                upgradeUrl: 'https://chimeo.app/pricing'
+            }
+        };
+        
+        console.log('Trial expiration email data:', emailData);
+    }
+
+    function showOrgRejectedMessage() {
+        alert('Your organization request has been rejected. Please contact support for more information.');
     }
     
     function handlePaidSubscription(plan, price) {
