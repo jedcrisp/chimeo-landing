@@ -900,6 +900,66 @@ input:checked + .slider:before {
     text-align: center;
 }
 
+/* Standard Account Section */
+.standard-account-section {
+    padding: 60px 0;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-top: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.standard-account-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.standard-account-text h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.standard-account-text p {
+    font-size: 1.1rem;
+    color: #64748b;
+    line-height: 1.6;
+}
+
+.standard-account-button {
+    flex-shrink: 0;
+}
+
+.standard-account-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background: #6366f1;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.standard-account-btn:hover {
+    background: #4f46e5;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+}
+
+.standard-account-btn i {
+    font-size: 1.1rem;
+}
+
 .features-comparison {
     padding: 80px 0;
     background: #f8fafc;
@@ -1101,6 +1161,20 @@ input:checked + .slider:before {
 
     .pricing-card.featured {
         transform: none;
+    }
+
+    .standard-account-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+    }
+
+    .standard-account-text h2 {
+        font-size: 1.5rem;
+    }
+
+    .standard-account-text p {
+        font-size: 1rem;
     }
 
     .faq-grid {
